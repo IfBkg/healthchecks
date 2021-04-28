@@ -1,3 +1,3 @@
-web: uwsgi --ini=docker/uwsgi.ini --http=0.0.0.0:$PORT
+web: gunicorn --workers=3 hc.wsgi:application --log-file -
 
 postdeploy: python manage.py migrate --no-input
