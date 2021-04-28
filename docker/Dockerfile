@@ -6,18 +6,17 @@ ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 WORKDIR /opt/healthchecks
 
 COPY requirements.txt /tmp
-RUN \
-    pip install --no-cache-dir -r /tmp/requirements.txt && \
-    pip install uwsgi
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 COPY . /opt/healthchecks/
 
 RUN \
     rm -f /opt/healthchecks/hc/local_settings.py && \
-    DEBUG=False SECRET_KEY=build-key ./manage.py collectstatic --noinput && \
-    DEBUG=False SECRET_KEY=build-key ./manage.py compress
+    DEBUG=False SECRET_KEY=build-key ./manage.py collectstatic --noinput
+
+RUN chown -R hc /opt/healthchecks
 
 USER hc
 
-CMD [ "uwsgi", "/opt/healthchecks/docker/uwsgi.ini"]
+CMD ["./start.sh"]
 

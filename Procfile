@@ -1,3 +1,3 @@
-web: gunicorn --workers=3 hc.wsgi:application --log-file -
+web: ./start.sh
 
 postdeploy: python manage.py migrate --no-input

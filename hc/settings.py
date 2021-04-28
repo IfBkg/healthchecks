@@ -265,6 +265,19 @@ WEBHOOKS_ENABLED = envbool("WEBHOOKS_ENABLED", "True")
 # Zulip
 ZULIP_ENABLED = envbool("ZULIP_ENABLED", "True")
 
+# Sentry
+
+SENTRY_DSN = os.getenv("SENTRY_DSN", None)
+
+if SENTRY_DSN is not None:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+    )
+
 # Read additional configuration from hc/local_settings.py if it exists
 if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
     from .local_settings import *
